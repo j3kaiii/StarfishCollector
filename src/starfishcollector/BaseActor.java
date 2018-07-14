@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Intersector;
 
 /**
  *
@@ -28,6 +30,7 @@ public class BaseActor extends Actor{
     private float acceleration;
     private float maxSpeed;
     private float deceleration;
+    private Polygon boundaryPolygon;
     
     public BaseActor(float x, float y, Stage s) {
         super();
@@ -42,6 +45,13 @@ public class BaseActor extends Actor{
         acceleration = 0;
         maxSpeed = 1000;
         deceleration = 0;
+    }
+    
+    public void setBoundaryRectangle() {
+        float w = getWidth();
+        float h = getHeight();
+        float[] vertices = {0,0, w,0, w,h, 0,h};
+        boundaryPolygon = new Polygon(vertices);
     }
     
     public void setMaxSpeed(float ms) {
@@ -95,6 +105,10 @@ public class BaseActor extends Actor{
         float h = tr.getRegionHeight();
         setSize(w, h);
         setOrigin(w/2, h/2);
+        
+        if (boundaryPolygon == null) {
+            setBoundaryRectangle();
+        }
     }
     
     public Animation loadAnimationFromFiles(String[] fileNames, float frameDuration, boolean loop) {
@@ -167,6 +181,50 @@ public class BaseActor extends Actor{
         animationPaused = pause;
     }
     
+    public void applyPhysics(float dt) {
+        velocityVec.add(accelerationVec.x * dt, accelerationVec.y * dt);
+        float speed = getSpeed();
+        if (accelerationVec.len() == 0) {
+            speed -= deceleration * dt;
+        }
+        speed = MathUtils.clamp(speed, 0, maxSpeed);
+        setSpeed(speed);
+        moveBy(velocityVec.x * dt, velocityVec.y * dt);
+        accelerationVec.set(0, 0);
+    }
+    
+    public void setBoundaryPolygon(int numSides) {
+        float w = getWidth();
+        float h = getHeight();
+        
+        float[] vertices = new float[2 * numSides];
+        for (int i = 0; i < numSides; i++) {
+            float angle = i * 6.28f / numSides;
+            vertices[2*i] = w/2 * MathUtils.cos(angle) + w/2;
+            vertices[2*i+1] = h/2 * MathUtils.sin(angle) + h/2;
+        }
+        boundaryPolygon = new Polygon(vertices);
+    }
+    
+    public Polygon getBoundaryPolygon() {
+        boundaryPolygon.setPosition(getX(), getY());
+        boundaryPolygon.setOrigin(getOriginX(), getOriginY());
+        boundaryPolygon.setRotation(getRotation());
+        boundaryPolygon.setScale(getScaleX(), getScaleY());
+        return boundaryPolygon;
+    }
+    
+    public boolean overlaps(BaseActor other) {
+        Polygon poly1 = this.getBoundaryPolygon();
+        Polygon poly2 = other.getBoundaryPolygon();
+        
+        if (!poly1.getBoundingRectangle().overlaps(poly2.getBoundingRectangle())) {
+            return false;
+        }
+        
+        return Intersector.overlapConvexPolygons(poly1, poly2);
+    }
+        
     public void act(float dt) {
         super.act(dt);
         if (!animationPaused) {
