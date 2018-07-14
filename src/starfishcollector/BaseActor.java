@@ -224,6 +224,18 @@ public class BaseActor extends Actor{
         
         return Intersector.overlapConvexPolygons(poly1, poly2);
     }
+    
+    public void centerAtPosition(float x, float y) {
+        setPosition(x - getWidth()/2, y - getHeight()/2);
+    }
+    
+    public void centerAtActor(BaseActor other) {
+        centerAtPosition(other.getX() + other.getWidth()/2, other.getY() + other.getHeight()/2);
+    }
+    
+    public void setOpacity(float opacity) {
+        this.getColor().a = opacity;
+    }
         
     public void act(float dt) {
         super.act(dt);
