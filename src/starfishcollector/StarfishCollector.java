@@ -37,11 +37,11 @@ public class StarfishCollector extends GameBeta{
 
     @Override
     public void update(float dt) {
-        for (BaseActor rockActor : BaseActor.getList(mainStage, "Rock")) {
+        for (BaseActor rockActor : BaseActor.getList(mainStage, "starfishcollector.Rock")) {
             turtle.preventOverlap(rockActor);
         }
         
-        for (BaseActor starfishActor : BaseActor.getList(mainStage, "Starfish")) {
+        for (BaseActor starfishActor : BaseActor.getList(mainStage, "starfishcollector.Starfish")) {
             Starfish starfish = (Starfish)starfishActor;
             
             if (turtle.overlaps(starfish) && !starfish.collected) {
@@ -56,7 +56,7 @@ public class StarfishCollector extends GameBeta{
             }
         }
         
-        if (BaseActor.count(mainStage, "Starfish") == 0 && !win) {
+        if (BaseActor.count(mainStage, "starfishcollector.Starfish") == 0 && !win) {
             win = true;
             BaseActor youWinMessage = new BaseActor(0, 0, mainStage);
             youWinMessage.loadTextire("you-win.png");
