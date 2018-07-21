@@ -49,38 +49,38 @@ public class BaseActor extends Actor{
         deceleration = 0;
     }
     
-    public void setBoundaryRectangle() {
+    public void setBoundaryRectangle() {        //получаем рамку для коллизий
         float w = getWidth();
         float h = getHeight();
         float[] vertices = {0,0, w,0, w,h, 0,h};
         boundaryPolygon = new Polygon(vertices);
     }
     
-    public void setMaxSpeed(float ms) {
+    public void setMaxSpeed(float ms) {         //устанавливаем макс скорость
         maxSpeed = ms;
     }
     
-    public void setDeceleration(float dec) {
+    public void setDeceleration(float dec) {    //скорость торможения
         deceleration = dec;
     }
     
-    public boolean isMoving() {
+    public boolean isMoving() {                 //проверяем, движется или нет
         return (getSpeed() > 0);
     }
     
-    public void setAcceleration(float acc) {
+    public void setAcceleration(float acc) {    //устанавливаем ускорение
         acceleration = acc;
     }
     
-    public void accelerateAtAngle(float angle) {
+    public void accelerateAtAngle(float angle) {    //ускоряем в сторону
         accelerationVec.add(new Vector2(acceleration, 0).setAngle(angle));
     }
     
-    public void accelerateForward() {
+    public void accelerateForward() {           //ускоряем вперед
         accelerateAtAngle(getRotation());
     }
     
-    public void setSpeed(float speed) {
+    public void setSpeed(float speed) {         //устанавливаем скорость
         if (velocityVec.len() == 0) {
             velocityVec.set(speed, 0);
         } else {
@@ -88,19 +88,19 @@ public class BaseActor extends Actor{
         }
     }
     
-    public float getSpeed() {
+    public float getSpeed() {                   //получаем скорость объекта
         return velocityVec.len();
     }
     
-    public void setMotionAngle(float angle) {
+    public void setMotionAngle(float angle) {   //поворачиваем объект в сторону
         velocityVec.setAngle(angle);
     }
     
-    public float getMotionAngle() {
+    public float getMotionAngle() {             //получаем сторону, куда смотрит объект
         return velocityVec.angle();
     }
     
-    public void setAnimation(Animation anim) {
+    public void setAnimation(Animation anim) {  //устанавливаем анимацию
         animation = anim;
         TextureRegion tr = animation.getKeyFrame(0);
         float w = tr.getRegionWidth();
@@ -113,6 +113,7 @@ public class BaseActor extends Actor{
         }
     }
     
+    //создаем анимацию из списка файлов
     public Animation loadAnimationFromFiles(String[] fileNames, float frameDuration, boolean loop) {
         int fileCount = fileNames.length;
         Array<TextureRegion> textureArray = new Array<TextureRegion>();
@@ -138,6 +139,7 @@ public class BaseActor extends Actor{
         return anim;
     }
     
+    //создаем анимацию из спрайтлоста
     public Animation loadAnimationFromSheet(String fileName, int rows, int cols, float frameDuration, boolean loop) {
         Texture texture = new Texture(Gdx.files.internal(fileName));
         texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -169,21 +171,21 @@ public class BaseActor extends Actor{
         return anim;
     }
     
-    public Animation loadTextire(String fileName) {
+    public Animation loadTextire(String fileName) { //анимация из одного кадра
         String[] fileNames = new String[1];
         fileNames[0] = fileName;
         return loadAnimationFromFiles(fileNames, 1, true);
     }
     
-    public boolean isAnimationFinished() {
+    public boolean isAnimationFinished() {          //проверяем закончилась ли анимация
         return animation.isAnimationFinished(elapsedTime);
     }
     
-    public void setAnimationPaused(boolean pause) {
+    public void setAnimationPaused(boolean pause) { //анимация на паузу
         animationPaused = pause;
     }
     
-    public void applyPhysics(float dt) {
+    public void applyPhysics(float dt) {            //применяем все физические изменения к объекту
         velocityVec.add(accelerationVec.x * dt, accelerationVec.y * dt);
         float speed = getSpeed();
         if (accelerationVec.len() == 0) {
@@ -195,7 +197,7 @@ public class BaseActor extends Actor{
         accelerationVec.set(0, 0);
     }
     
-    public void setBoundaryPolygon(int numSides) {
+    public void setBoundaryPolygon(int numSides) {  //полигон коллизий
         float w = getWidth();
         float h = getHeight();
         
@@ -208,7 +210,7 @@ public class BaseActor extends Actor{
         boundaryPolygon = new Polygon(vertices);
     }
     
-    public Polygon getBoundaryPolygon() {
+    public Polygon getBoundaryPolygon() {           //получаем полигон коллизий
         boundaryPolygon.setPosition(getX(), getY());
         boundaryPolygon.setOrigin(getOriginX(), getOriginY());
         boundaryPolygon.setRotation(getRotation());
@@ -216,7 +218,7 @@ public class BaseActor extends Actor{
         return boundaryPolygon;
     }
     
-    public boolean overlaps(BaseActor other) {
+    public boolean overlaps(BaseActor other) {      //проверяем пересечение с другим полигоном
         Polygon poly1 = this.getBoundaryPolygon();
         Polygon poly2 = other.getBoundaryPolygon();
         
@@ -227,7 +229,7 @@ public class BaseActor extends Actor{
         return Intersector.overlapConvexPolygons(poly1, poly2);
     }
     
-    public Vector2 preventOverlap(BaseActor other) {
+    public Vector2 preventOverlap(BaseActor other) {    //прекращение движения при пересечении с другим полигоном
         Polygon poly1 = this.getBoundaryPolygon();
         Polygon poly2 = other.getBoundaryPolygon();
         
@@ -244,26 +246,26 @@ public class BaseActor extends Actor{
         return mtv.normal;
     }
     
-    public void centerAtPosition(float x, float y) {
+    public void centerAtPosition(float x, float y) {    //размещает объект в по координатам
         setPosition(x - getWidth()/2, y - getHeight()/2);
     }
     
-    public void centerAtActor(BaseActor other) {
+    public void centerAtActor(BaseActor other) {        //размещает объект по другому объекту
         centerAtPosition(other.getX() + other.getWidth()/2, other.getY() + other.getHeight()/2);
     }
     
-    public void setOpacity(float opacity) {
+    public void setOpacity(float opacity) {             //устанавливаем прозрачность
         this.getColor().a = opacity;
     }
         
-    public void act(float dt) {
+    public void act(float dt) {                         //применение изменений в объекте
         super.act(dt);
         if (!animationPaused) {
             elapsedTime += dt;
         }
     }
     
-    public void draw(Batch batch, float parentAlpha) {
+    public void draw(Batch batch, float parentAlpha) {  //отрисовка объекта после всех телодвижений
         super.draw(batch, parentAlpha);
         
         Color c = getColor();
@@ -277,8 +279,8 @@ public class BaseActor extends Actor{
     }
     
     
-    public static ArrayList<BaseActor> getList(Stage stage, String className) {
-        ArrayList<BaseActor> list = new ArrayList<BaseActor>();
+    public static ArrayList<BaseActor> getList(Stage stage, String className) { //сбор инстансов в один список
+        ArrayList<BaseActor> list = new ArrayList<BaseActor>();                 //по имени класса
         
         Class theClass = null;
         try {
@@ -296,7 +298,7 @@ public class BaseActor extends Actor{
         return list;
     }
     
-    public static int count(Stage stage, String className) {
+    public static int count(Stage stage, String className) {            //считаем инстансы в списке
         return getList(stage, className).size();
     }
 }
