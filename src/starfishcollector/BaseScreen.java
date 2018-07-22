@@ -1,33 +1,32 @@
 package starfishcollector;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
-
-
+import com.badlogic.gdx.Screen;
+import org.lwjgl.Sys;
 /**
  *
  * @author j3kaiii
  */
-public abstract class GameBeta extends Game{
+public abstract class BaseScreen implements Screen{
     protected Stage mainStage;
     protected Stage uiStage;
-
-    @Override
-    public void create() {
+    
+    public BaseScreen() {
         mainStage = new Stage();
         uiStage = new Stage();
+        
         initialize();
     }
     
     public abstract void initialize();
     
-    public void render() {
-        float dt = Gdx.graphics.getDeltaTime();
-        mainStage.act(dt);
+    public abstract void update(float dt);
+    
+    public void render(float dt) {
         uiStage.act(dt);
+        mainStage.act(dt);
         
         update(dt);
         
@@ -38,6 +37,16 @@ public abstract class GameBeta extends Game{
         uiStage.draw();
     }
     
-    public abstract void update(float dt);
+    public void resize(int width, int height) {}
+    
+    public void pause() {}
+    
+    public void resume() {}
+    
+    public void dispose() {}
+    
+    public void show() {}
+    
+    public void hide() {}
 
 }

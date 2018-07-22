@@ -17,12 +17,17 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector;
 import java.util.ArrayList;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  *
  * @author j3kaiii
  */
 public class BaseActor extends Actor{
+    
+    private static Rectangle worldBounds;
     
     private Animation animation;
     private float elapsedTime;
@@ -298,8 +303,42 @@ public class BaseActor extends Actor{
         return list;
     }
     
+    public void boundToWorld() {
+        if(getX() < 0) { setX(0); }
+        if(getX() + getWidth() > worldBounds.width) { setX(worldBounds.width - getWidth()); }
+        if(getY() < 0) { setY(0); }
+        if(getY() + getHeight() > worldBounds.height) { setY(worldBounds.height - getHeight()); }
+    }
+    
+    public void alighCamera() {
+        Camera cam = this.getStage().getCamera();
+        Viewport v = this.getStage().getViewport();
+        
+        //центрируем камеру на героя
+        cam.position.set(this.getX() + this.getOriginX(),
+                        this.getY() + this.getOriginY(), 
+                        0);
+        
+        //не даем камере выйти за границы карты
+        cam.position.x = MathUtils.clamp(cam.position.x,
+                                        cam.viewportWidth/2,
+                                        worldBounds.width - cam.viewportWidth/2);
+        cam.position.y = MathUtils.clamp(cam.position.y,
+                                        cam.viewportHeight/2,
+                                        worldBounds.height - cam.viewportHeight/2);
+        cam.update();
+    }
+    
     public static int count(Stage stage, String className) {            //считаем инстансы в списке
         return getList(stage, className).size();
+    }
+    
+    public static void setWorldBounds(float width, float height) {
+        worldBounds = new Rectangle(0, 0, width, height);
+    }
+    
+    public static void setWorldBounds(BaseActor ba) {
+        setWorldBounds(ba.getWidth(), ba.getHeight());
     }
 }
 

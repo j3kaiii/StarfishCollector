@@ -1,20 +1,17 @@
 package starfishcollector;
 
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-
 /**
  *
- * @author user
+ * @author j3kaiii
  */
-public class StarfishCollector extends GameBeta{
-
+public class LevelScreen extends BaseScreen {
     private Turtle turtle;
     private boolean win;
-    
 
     @Override
     public void initialize() {
-        
         BaseActor ocean = new BaseActor(0, 0, mainStage);
         ocean.loadTextire("water-border.jpg");
         ocean.setSize(1200, 900);
@@ -33,7 +30,6 @@ public class StarfishCollector extends GameBeta{
         turtle = new Turtle(20, 20, mainStage);
         
         win = false;
-        
     }
 
     @Override
@@ -66,6 +62,7 @@ public class StarfishCollector extends GameBeta{
             youWinMessage.addAction(Actions.delay(1));
             youWinMessage.addAction(Actions.after(Actions.fadeIn(1)));
         }
-    }
     
+    }
+
 }
