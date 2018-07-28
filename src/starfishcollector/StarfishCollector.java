@@ -17,18 +17,25 @@ public class StarfishCollector extends GameBeta{
         
         BaseActor ocean = new BaseActor(0, 0, mainStage);
         ocean.loadTextire("water-border.jpg");
-        ocean.setSize(1200, 900);
+        ocean.setSize(800, 1600);
         BaseActor.setWorldBounds(ocean);
         
+        new Starfish(600, 200, mainStage);
         new Starfish(400, 400, mainStage);
-        new Starfish(500, 100, mainStage);
-        new Starfish(100, 450, mainStage);
-        new Starfish(200, 250, mainStage);
+        new Starfish(200, 600, mainStage);
+        new Starfish(400, 800, mainStage);
+        new Starfish(600, 1000, mainStage);
+        new Starfish(200, 1200, mainStage);
+        new Starfish(200, 1400, mainStage);
+        new Starfish(600, 1500, mainStage);
         
-        new Rock(200, 150, mainStage);
-        new Rock(100, 300, mainStage);
-        new Rock(300, 350, mainStage);
-        new Rock(450, 200, mainStage);
+        new Rock(400, 620, mainStage);
+        new Rock(500, 600, mainStage);
+        new Rock(600, 580, mainStage);
+        new Rock(200, 800, mainStage);
+        new Rock(250, 900, mainStage);
+        new Rock(350, 900, mainStage);
+        new Rock(450, 900, mainStage);
         
         turtle = new Turtle(20, 20, mainStage);
         
