@@ -7,7 +7,7 @@ import com.badlogic.gdx.Input.Keys;
  * @author j3kaiii
  */
 public class MenuScreen extends BaseScreen{
-
+   
     @Override
     public void initialize() {
         BaseActor ocean = new BaseActor(0, 0, mainStage);
@@ -30,6 +30,5 @@ public class MenuScreen extends BaseScreen{
         if (Gdx.input.isKeyPressed(Keys.S)) {
             StarfishGame.setActiveScreen(new LevelScreen());
         }
-    }
-
+    }   
 }

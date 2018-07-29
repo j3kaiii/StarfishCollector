@@ -29,7 +29,7 @@ public class FinalScreen extends BaseScreen{
     @Override
     public void update(float dt) {
         if (Gdx.input.isKeyPressed(Keys.C)) {
-            StarfishGame.setActiveScreen(new LevelScreen());
+            StarfishGame.setActiveScreen(new MenuScreen());
         }
     }
 

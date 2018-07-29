@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Timer.Task;
 public class LevelScreen extends BaseScreen {
     private Turtle turtle;
     private boolean win, die;
+    private float delayTime;
+    
 
     @Override
     public void initialize() {
@@ -36,12 +38,15 @@ public class LevelScreen extends BaseScreen {
         new Rock(350, 900, mainStage);
         new Rock(450, 900, mainStage);
         
-        new Shark(200, 100, mainStage);
+        new Shark(200, 1000, mainStage);
+        new Shark(400, 1200, mainStage);
         
         turtle = new Turtle(20, 20, mainStage);
         
         die = false;
         win = false;
+        
+        delayTime = 0;
     }
 
     @Override
@@ -84,14 +89,6 @@ public class LevelScreen extends BaseScreen {
                 youLose.setOpacity(0);
                 youLose.addAction(Actions.delay(1));
                 youLose.addAction(Actions.after(Actions.fadeIn(1)));
-                Timer.schedule(new Task() {
-                    
-                    @Override
-                    public void run() {
-                        
-                    }
-                }, 30000);
-                StarfishGame.setActiveScreen(new FinalScreen());
             }
         }
         
@@ -104,6 +101,17 @@ public class LevelScreen extends BaseScreen {
             youWinMessage.addAction(Actions.delay(1));
             youWinMessage.addAction(Actions.after(Actions.fadeIn(1)));
         }
+        
+        if (die) {
+            delayTime += dt;
+            if (delayTime > 5.0f) {
+                    
+                    StarfishGame.setActiveScreen(new FinalScreen());
+                } else {
+                    System.out.println(delayTime);
+                }
+        }
+                
     
     }
 

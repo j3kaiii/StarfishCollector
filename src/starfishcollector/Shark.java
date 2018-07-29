@@ -25,8 +25,8 @@ public class Shark extends BaseActor{
         
         faceRight = true;
         
-        sharkMoveRight = Actions.moveTo(endX, endY, 3);
-        sharkMoveLeft = Actions.moveTo(startX, startY, 3);
+        sharkMoveRight = Actions.moveTo(endX, endY, 4);
+        sharkMoveLeft = Actions.moveTo(startX, startY, 2);
         this.addAction(sharkMoveRight);
         
         setBoundaryPolygon(8);        
